@@ -1,7 +1,8 @@
 import { ErrorRequestHandler } from 'express'
 import { ErrorStatus } from '../constants'
 
-export const handleError: ErrorRequestHandler = (err, req, res) => {
+/* eslint-disable no-unused-vars */
+export const handleError: ErrorRequestHandler = (err, req, res, next) => {
   const { statusCode = ErrorStatus.INTERNAL_SERVER_ERROR, message } = err
 
   if (statusCode === ErrorStatus.INTERNAL_SERVER_ERROR) console.error('ERROR', message)
