@@ -1,12 +1,13 @@
 import { Router } from 'express'
-import { createUser, getUser, getUsers, updateAvatar, updateUser } from '../controllers/users'
+import { getMe, getUser, getUsers, updateAvatar, updateUser } from '../controllers/users'
+import { updateAvatarValidation, updateUserValidation } from '../middlewares/validations'
 
 const router = Router()
 
 router.get('/', getUsers)
+router.get('/me', getMe)
 router.get('/:userId', getUser)
-router.post('/', createUser)
-router.patch('/me', updateUser)
-router.patch('/me/avatar', updateAvatar)
+router.patch('/me', updateUserValidation(), updateUser)
+router.patch('/me/avatar', updateAvatarValidation(), updateAvatar)
 
 export default router

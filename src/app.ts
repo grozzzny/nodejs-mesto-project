@@ -1,10 +1,14 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import usersRouter from './routes/users'
-import cardsRouter from './routes/cards'
 import path from 'path'
-import { UserRequest } from './types'
+import { errors } from 'celebrate'
+import cardsRouter from './routes/cards'
+import usersRouter from './routes/users'
 import { handleError } from './controllers/errors'
+import { createUser, login } from './controllers/users'
+import { auth } from './middlewares/auth'
+import { errorLogger, requestLogger } from './middlewares/logger'
+import { signInValidation, signUpValidation } from './middlewares/validations'
 
 const { PORT = 3000 } = process.env
 
@@ -16,24 +20,24 @@ mongoose.connect('mongodb://localhost:27017/mestodb').catch((err) => console.err
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Runtime
-app.use((req: UserRequest, res, next) => {
-  req.user = {
-    _id: '67c74a2d9a9526e3002cda4e'
-  }
-
-  next()
-})
+// Logger
+app.use(requestLogger)
 
 // Routes
-app.use('/cards', cardsRouter)
-app.use('/users', usersRouter)
+app.use('/cards', auth, cardsRouter)
+app.use('/users', auth, usersRouter)
+app.post('/signin', signInValidation(), login)
+app.post('/signup', signUpValidation(), createUser)
+
+// Logger
+app.use(errorLogger)
+
+// Handler errors
+app.use(errors())
+app.use(handleError)
 
 // Static
 app.use(express.static(path.join(__dirname, '..', 'public')))
-
-// Handler errors
-app.use(handleError)
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)

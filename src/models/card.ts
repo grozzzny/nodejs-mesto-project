@@ -1,6 +1,7 @@
 import mongoose, { ObjectId, Schema, Document } from 'mongoose'
+import { PatternLink } from '../constants'
 
-interface ICard extends Document {
+export interface ICard extends Document {
   name: string
   link: string
   owner: ObjectId
@@ -17,7 +18,11 @@ const cardSchema = new mongoose.Schema<ICard>({
   },
   link: {
     type: String,
-    required: true
+    required: true,
+    validate: {
+      validator: (value: string) => PatternLink.test(value),
+      message: 'Неправильный формат URL'
+    }
   },
   owner: {
     type: Schema.Types.ObjectId,

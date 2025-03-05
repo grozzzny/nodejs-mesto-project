@@ -1,5 +1,9 @@
 import { Request } from 'express'
 
-interface UserRequest extends Request {
-  user?: { _id: string }
+interface AuthRequest extends Request {
+  user?: Payload
+}
+
+interface Payload {
+  _id: string
 }
