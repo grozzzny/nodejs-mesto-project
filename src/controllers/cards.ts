@@ -8,7 +8,7 @@ export const createCard: RequestHandler = (req: UserRequest, res, next) => {
   const { name, link } = req.body
 
   Card.create({ name, link, owner: req.user?._id })
-    .then((card) => res.send(card))
+    .then((card) => res.status(201).send(card))
     .catch(next)
 }
 
