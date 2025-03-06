@@ -11,7 +11,7 @@ export const createUser: RequestHandler = (req, res, next) => {
 
   bcrypt
     .hash(password, 10)
-    .then((hash: string) => User.create({ name, about, avatar, email, password: hash }).then((user) => res.send(user)))
+    .then((hash: string) => User.create({ name, about, avatar, email, password: hash }).then((user) => res.status(201).send(user)))
     .catch(next)
 }
 
@@ -28,7 +28,7 @@ export const updateUser: RequestHandler = (req: AuthRequest, res, next) => {
     .then((user) => {
       if (!user) throw new NotFoundError('Пользователь не найден')
       if (user._id?.toString() !== req.user?._id) throw new ForbiddenError('Нет прав')
-      User.findByIdAndUpdate(req.user?._id, { name, about }, { new: true })
+      User.findByIdAndUpdate(req.user?._id, { name, about }, { new: true, runValidators: true })
         .then((updatedUser) => res.send({ user: updatedUser }))
         .catch(next)
     })
@@ -42,7 +42,7 @@ export const updateAvatar: RequestHandler = (req: AuthRequest, res, next) => {
     .then((user) => {
       if (!user) throw new NotFoundError('Пользователь не найден')
       if (user._id?.toString() !== req.user?._id) throw new ForbiddenError('Нет прав')
-      User.findByIdAndUpdate(req.user?._id, { avatar }, { new: true })
+      User.findByIdAndUpdate(req.user?._id, { avatar }, { new: true, runValidators: true })
         .then((updatedUser) => res.send({ user: updatedUser }))
         .catch(next)
     })

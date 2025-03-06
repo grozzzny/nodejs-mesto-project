@@ -9,6 +9,7 @@ import { createUser, login } from './controllers/users'
 import { auth } from './middlewares/auth'
 import { errorLogger, requestLogger } from './middlewares/logger'
 import { signInValidation, signUpValidation } from './middlewares/validations'
+import { sendResponse } from './helper'
 
 const { PORT = 3000 } = process.env
 
@@ -28,6 +29,7 @@ app.use('/cards', auth, cardsRouter)
 app.use('/users', auth, usersRouter)
 app.post('/signin', signInValidation(), login)
 app.post('/signup', signUpValidation(), createUser)
+app.use('*', (req, res) => sendResponse(res, 'Страница не найдена', ErrorStatus.NOT_FOUND))
 
 // Logger
 app.use(errorLogger)

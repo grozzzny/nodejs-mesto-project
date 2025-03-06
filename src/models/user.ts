@@ -55,7 +55,8 @@ const userSchema = new mongoose.Schema<IUser>({
     required: true,
     select: false
   }
-})
+},
+  { versionKey: false })
 
 userSchema.static('findUserByCredentials', function findUserByCredentials(email: string, password: string) {
   return this.findOne({ email })
