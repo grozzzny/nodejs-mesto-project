@@ -4,7 +4,9 @@ import usersRouter from './routes/users'
 import cardsRouter from './routes/cards'
 import path from 'path'
 import { UserRequest } from './types'
-import { handleError } from './controllers/errors'
+import { handleError } from './middlewares/errors'
+import { sendResponse } from './helper'
+import { ErrorStatus } from './constants'
 
 const { PORT = 3000 } = process.env
 
@@ -28,6 +30,7 @@ app.use((req: UserRequest, res, next) => {
 // Routes
 app.use('/cards', cardsRouter)
 app.use('/users', usersRouter)
+app.use('*', (req, res) => sendResponse(res, 'Страница не найдена', ErrorStatus.NOT_FOUND))
 
 // Static
 app.use(express.static(path.join(__dirname, '..', 'public')))
