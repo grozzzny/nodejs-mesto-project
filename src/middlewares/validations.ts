@@ -30,6 +30,21 @@ export const createCardValidation = () =>
     })
   })
 
+export const userIdValidation = () =>
+  celebrate({
+    params: Joi.object().keys({
+      userId: Joi.string().required().length(24)
+    })
+  })
+
+
+export const cardIdValidation = () =>
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string().required().length(24)
+    })
+  })
+
 export const updateUserValidation = () =>
   celebrate({
     body: Joi.object<IUser>().keys({
