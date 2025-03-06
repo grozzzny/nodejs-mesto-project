@@ -32,7 +32,7 @@ export const deleteCards: RequestHandler = (req: AuthRequest, res, next) => {
 }
 
 export const addLike: RequestHandler = (req: AuthRequest, res, next) => {
-  Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user?._id } }, { new: true })
+  Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user?._id } }, { new: true, runValidators: true })
     .then((card) => {
       if (!card) throw new NotFoundError('Нет карточки с таким id')
       sendResponse(res, 'Лайк добавлен')
@@ -41,7 +41,7 @@ export const addLike: RequestHandler = (req: AuthRequest, res, next) => {
 }
 
 export const deleteLike: RequestHandler = (req: AuthRequest, res, next) => {
-  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user?._id } }, { new: true })
+  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user?._id } }, { new: true, runValidators: true })
     .then((card) => {
       if (!card) throw new NotFoundError('Нет карточки с таким id')
       sendResponse(res, 'Лайк удален')

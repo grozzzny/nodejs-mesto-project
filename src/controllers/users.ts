@@ -11,7 +11,9 @@ export const createUser: RequestHandler = (req, res, next) => {
 
   bcrypt
     .hash(password, 10)
-    .then((hash: string) => User.create({ name, about, avatar, email, password: hash }).then((user) => res.status(201).send(user)))
+    .then((hash: string) =>
+      User.create({ name, about, avatar, email, password: hash }).then((user) => res.status(201).send(user))
+    )
     .catch(next)
 }
 

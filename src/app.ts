@@ -4,12 +4,13 @@ import path from 'path'
 import { errors } from 'celebrate'
 import cardsRouter from './routes/cards'
 import usersRouter from './routes/users'
-import { handleError } from './controllers/errors'
 import { createUser, login } from './controllers/users'
 import { auth } from './middlewares/auth'
 import { errorLogger, requestLogger } from './middlewares/logger'
 import { signInValidation, signUpValidation } from './middlewares/validations'
 import { sendResponse } from './helper'
+import { ErrorStatus } from './constants'
+import { handleError } from './middlewares/errors'
 
 const { PORT = 3000 } = process.env
 
